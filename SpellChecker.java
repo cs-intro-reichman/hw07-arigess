@@ -4,14 +4,16 @@ public class SpellChecker {
 
     public static void main(String[] args) {
         //String word = args[0];
+        String word = "concensus";
         //int threshold = Integer.parseInt(args[1]);
-        //String[] dictionary = readDictionary("dictionary.txt");
-        //String correction = spellChecker(word, threshold, dictionary);
-        //System.out.println(correction);
-        String word1 = "bla";
-        String word2 = "brra";
-        int result = levenshtein(word1, word2);
-        System.out.println(result);
+        int threshold = 1;
+        String[] dictionary = readDictionary("dictionary.txt");
+        String correction = spellChecker(word, threshold, dictionary);
+        System.out.println(correction);
+        //String word1 = "bla";
+        //String word2 = "brra";
+        //int result = levenshtein(word1, word2);
+        //System.out.println(result);
 
     }
 
@@ -21,6 +23,8 @@ public class SpellChecker {
     }
 
     public static int levenshtein(String word1, String word2) {
+        word1 = word1.toLowerCase();
+        word2 = word2.toLowerCase();
         if (word1 == "") {
             return word2.length();
         } else if (word2 == "") {
@@ -39,15 +43,28 @@ public class SpellChecker {
         String[] dictionary = new String[3000];
 
         In in = new In(fileName);
-
-        // Your code here
+        for(int i=0;i<dictionary.length; i++){
+            dictionary[i] = in.readLine();
+        }
 
         return dictionary;
     }
 
     public static String spellChecker(String word, int threshold, String[] dictionary) {
-        // Your code goes here
-        return "";
+        int smallestDistance = Integer.MAX_VALUE;
+        String closestWord = "";
+        for (int i=0; i< dictionary.length; i++){
+            int result = levenshtein(word, dictionary[i]);
+            if (result <= threshold && result < smallestDistance){
+                smallestDistance = result;
+                closestWord = dictionary[i];
+            }
+        }
+        if (closestWord == ""){
+            return word;
+        }
+
+        return closestWord;
     }
 
 }
